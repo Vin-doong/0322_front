@@ -16,6 +16,17 @@ const ChangePassword = () => {
   const [success, setSuccess] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // 비밀번호 표시 상태
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // 비밀번호 유효성 검사 상태
+  const [validation, setValidation] = useState({
+    passwordChecked: false,
+    passwordMatch: false
+  });
+
   // 로그인 상태 확인
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -31,6 +42,37 @@ const ChangePassword = () => {
     // 최소 8자, 숫자와 특수문자 포함 필수
     const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     return regex.test(password);
+  };
+
+  // 새 비밀번호 입력 처리
+  const handleNewPasswordChange = (e) => {
+    const value = e.target.value;
+    setNewPassword(value);
+    
+    // 비밀번호 유효성 검사
+    const isValid = validatePassword(value);
+    
+    // 비밀번호 일치 여부 확인
+    const passwordsMatch = value === confirmPassword && value !== '';
+    
+    setValidation({
+      passwordChecked: isValid,
+      passwordMatch: passwordsMatch
+    });
+  };
+
+  // 비밀번호 확인 입력 처리
+  const handleConfirmPasswordChange = (e) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    
+    // 비밀번호 일치 여부 확인
+    const passwordsMatch = newPassword === value && value !== '';
+    
+    setValidation({
+      ...validation,
+      passwordMatch: passwordsMatch
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -66,6 +108,10 @@ const ChangePassword = () => {
         setOldPassword('');
         setNewPassword('');
         setConfirmPassword('');
+        setValidation({
+          passwordChecked: false,
+          passwordMatch: false
+        });
         
         // 3초 후 마이페이지로 이동
         setTimeout(() => {
@@ -104,40 +150,82 @@ const ChangePassword = () => {
             )}
             
             <Form onSubmit={handleSubmit}>
+              {/* 현재 비밀번호 입력 필드 */}
               <Form.Group className="mb-3">
                 <Form.Label>현재 비밀번호</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  placeholder="현재 비밀번호를 입력하세요"
-                  required
-                />
+                <div className="position-relative">
+                  <Form.Control
+                    type={showOldPassword ? "text" : "password"}
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    placeholder="현재 비밀번호를 입력하세요"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="btn position-absolute end-0 top-0 h-100 d-flex align-items-center border-0 bg-transparent"
+                    onClick={() => setShowOldPassword(!showOldPassword)}
+                    style={{ background: 'none', border: 'none' }}
+                  >
+                    <i className={`fas ${showOldPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+                </div>
               </Form.Group>
               
+              {/* 새 비밀번호 입력 필드 */}
               <Form.Group className="mb-3">
                 <Form.Label>새 비밀번호</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="새 비밀번호를 입력하세요"
-                  required
-                />
-                <Form.Text className="text-muted">
-                  비밀번호는 8자 이상, 숫자와 특수문자를 포함해야 합니다.
+                <div className="position-relative">
+                  <Form.Control
+                    type={showNewPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={handleNewPasswordChange}
+                    placeholder="새 비밀번호를 입력하세요"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="btn position-absolute end-0 top-0 h-100 d-flex align-items-center border-0 bg-transparent"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    style={{ background: 'none', border: 'none' }}
+                  >
+                    <i className={`fas ${showNewPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+                </div>
+                <Form.Text className={validation.passwordChecked ? "text-success" : "text-muted"}>
+                  {validation.passwordChecked 
+                    ? "✅ 비밀번호가 유효합니다." 
+                    : "비밀번호는 8자 이상, 숫자와 특수문자를 포함해야 합니다."}
                 </Form.Text>
               </Form.Group>
               
+              {/* 새 비밀번호 확인 필드 */}
               <Form.Group className="mb-4">
                 <Form.Label>새 비밀번호 확인</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="새 비밀번호를 다시 입력하세요"
-                  required
-                />
+                <div className="position-relative">
+                  <Form.Control
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                    placeholder="새 비밀번호를 다시 입력하세요"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="btn position-absolute end-0 top-0 h-100 d-flex align-items-center border-0 bg-transparent"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    style={{ background: 'none', border: 'none' }}
+                  >
+                    <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+                </div>
+                {confirmPassword && (
+                  <Form.Text className={validation.passwordMatch ? "text-success" : "text-danger"}>
+                    {validation.passwordMatch 
+                      ? "✅ 비밀번호가 일치합니다." 
+                      : "❌ 비밀번호가 일치하지 않습니다."}
+                  </Form.Text>
+                )}
               </Form.Group>
               
               <div className="d-flex justify-content-between">
@@ -151,7 +239,7 @@ const ChangePassword = () => {
                 <Button
                   type="submit"
                   style={{ backgroundColor: '#2A9D8F', border: 'none' }}
-                  disabled={loading}
+                  disabled={loading || !validation.passwordChecked || !validation.passwordMatch}
                 >
                   {loading ? '처리 중...' : '비밀번호 변경'}
                 </Button>
