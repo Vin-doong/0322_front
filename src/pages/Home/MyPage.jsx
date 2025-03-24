@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Header from '../../components/include/Header';
 
 const MyPage = () => {
+  const navigate = useNavigate();
   const [date, setDate] = useState(new Date());
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);  // 사이드바 상태 관리
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  // 추가 보안 체크 (이중 보호)
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      // 알림 메시지 없이 리다이렉트만 수행
+      navigate('/login');
+    }
+  }, [navigate]);
 
   // 주간 날짜 구하기
   const getWeekDates = (currentDate) => {
