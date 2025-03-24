@@ -43,8 +43,25 @@ const Signup = () => {
     passwordChecked: false
   });
 
+  const [birthdateError, setBirthdateError] = useState("");
   // 현재 날짜 계산 (생년월일 최대값으로 사용)
   const today = new Date().toISOString().split('T')[0];
+
+  // 생년월일 변경 핸들러 추가
+  const handleBirthdateChange = (e) => {
+    const selectedDate = e.target.value;
+    
+    if (selectedDate > today) {
+      setBirthdateError("생년월일은 현재 날짜 이후로 설정할 수 없습니다.");
+      return;
+    }
+    
+    setBirthdateError("");
+    setFormData({
+      ...formData,
+      birthDate: selectedDate
+    });
+  };
 
   // 이메일 변경 시 유효성 검사 결과 초기화
   const handleEmailChange = (e) => {
@@ -424,11 +441,19 @@ const Signup = () => {
                     type="date"
                     name="birthDate"
                     value={formData.birthDate}
-                    onChange={handleChange}
-                    max={today} // 현재 날짜 이후는 선택 불가
+                    onChange={handleBirthdateChange}
+                    max={today}
+                    className={`signup-form-control ${birthdateError ? "is-invalid" : ""}`}
                     required
-                    className="signup-form-control"
                   />
+                  {birthdateError && (
+                    <div className="invalid-feedback">
+                      {birthdateError}
+                    </div>
+                  )}
+                  <Form.Text className="text-muted">
+                    생년월일은 현재 날짜 이전만 선택 가능합니다.
+                  </Form.Text>
                 </Form.Group>
 
                 <Form.Group className="mb-3">

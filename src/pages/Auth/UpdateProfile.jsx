@@ -1,4 +1,4 @@
-// src/pages/Auth/UpdateProfile.jsx (통합된 버전)
+// src/pages/Auth/UpdateProfile.jsx (전체 코드)
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,9 @@ const UpdateProfile = () => {
     passwordChecked: false,
     passwordMatch: false
   });
+  
+  // 현재 날짜 계산 (생년월일 최대값으로 사용)
+  const today = new Date().toISOString().split('T')[0];
 
   // 컴포넌트가 마운트될 때 사용자 정보 가져오기
   useEffect(() => {
@@ -214,6 +217,27 @@ const UpdateProfile = () => {
       console.error("닉네임 중복 확인 오류:", error);
       alert("닉네임 중복 확인 중 오류가 발생했습니다.");
     }
+  };
+  // 생년월일 유효성 검사 상태 추가
+  const [birthdateError, setBirthdateError] = useState("");
+
+  // 생년월일 변경 핸들러 수정
+  const handleBirthdateChange = (e) => {
+    const selectedDate = e.target.value;
+    
+    // 오늘 날짜와 선택된 날짜 비교
+    if (selectedDate > today) {
+      setBirthdateError("생년월일은 현재 날짜 이후로 설정할 수 없습니다.");
+      // 입력값은 변경하지 않음 (기존 값 유지)
+      return;
+    }
+    
+    // 유효한 날짜인 경우
+    setBirthdateError("");
+    setFormData({
+      ...formData,
+      birthDate: selectedDate
+    });
   };
 
   // 소셜 타입에 따른 한글 이름 반환
@@ -461,21 +485,31 @@ const UpdateProfile = () => {
                   )}
                 </Form.Group>
 
-                {/* 생년월일 필드 */}
+                {/* 생년월일 필드 - max 속성 추가 */}
                 <Form.Group className="mb-3">
                   <Form.Label className="signup-form-label">생년월일</Form.Label>
                   <Form.Control
                     type="date"
                     name="birthDate"
                     value={formData.birthDate}
-                    onChange={handleChange}
-                    className="signup-form-control"
+                    onChange={handleBirthdateChange} // 기존 handleChange에서 변경
+                    max={today}
+                    className={`signup-form-control ${birthdateError ? "is-invalid" : ""}`}
                     disabled={isSocialAccount}
                     required
                   />
-                  {isSocialAccount && (
+                  {birthdateError && (
+                    <div className="invalid-feedback">
+                      {birthdateError}
+                    </div>
+                  )}
+                  {isSocialAccount ? (
                     <Form.Text className="text-muted">
                       소셜 계정은 생년월일을 변경할 수 없습니다.
+                    </Form.Text>
+                  ) : (
+                    <Form.Text className="text-muted">
+                      생년월일은 현재 날짜 이전만 선택 가능합니다.
                     </Form.Text>
                   )}
                 </Form.Group>
