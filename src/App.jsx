@@ -18,7 +18,7 @@ import GoogleCallback from "./pages/Auth/GoogleCallback";
 import NaverCallback from "./pages/Auth/NaverCallback";
 import UpdateProfile from "./pages/Auth/UpdateProfile";
 import FindPassword from "./pages/Auth/FindPassword";
-import ChangePassword from "./pages/Auth/ChangePassword";
+//import ChangePassword from "./pages/Auth/ChangePassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -56,11 +56,11 @@ function App() {
             <UpdateProfile />
           </ProtectedRoute>
         } />
-        <Route path="/change-password" element={
+        {/* <Route path="/change-password" element={
           <ProtectedRoute>
             <ChangePassword />
           </ProtectedRoute>
-        } />
+        } /> */}
         <Route path="/schedule" element={
           <ProtectedRoute>
             <Schedule />

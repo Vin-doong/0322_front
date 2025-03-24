@@ -359,4 +359,9 @@ export const getRecommendations = (keyword) => {
   return axios.get(`${API_BASE_URL}/recommend?keyword=${encodedKeyword}&_=${timestamp}`);
 };
 
+// 사용자 계정 유형 확인 API (소셜 계정 여부)
+export const checkAccountType = async () => {
+  return api.get("/member/account-type");
+};
+
 export default api;
