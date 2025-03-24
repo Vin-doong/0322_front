@@ -359,6 +359,58 @@ export const getRecommendations = (keyword) => {
   return axios.get(`${API_BASE_URL}/recommend?keyword=${encodedKeyword}&_=${timestamp}`);
 };
 
+//📛📛리뷰 관련 추가
+// 리뷰 목록 조회
+export const getReviews = async () => {
+  return api.get("/reviews");
+};
+
+// 특정 리뷰 조회
+export const getReviewById = async (reviewId) => {
+  return api.get(`/reviews/${reviewId}`);
+};
+
+// 리뷰 작성
+export const createReview = async (reviewData) => {
+  return api.post("/reviews", reviewData, {
+      headers: { "Content-Type": "application/json" }
+    })
+};
+
+// 리뷰 수정
+export const updateReview = async (reviewId, reviewData) => {
+  return api.put(`/reviews/${reviewId}`, reviewData, {
+    headers: { "Content-Type": "application/json" }
+  });
+};
+
+
+// 리뷰 삭제
+export const deleteReview = async (reviewId) => {
+  return api.delete(`/reviews/${reviewId}`);
+};
+
+// 리뷰 좋아요 추가
+export const likeReview = async (reviewId) => {
+  return api.post(`/reviews/${reviewId}/like`);
+};
+
+// 리뷰 싫어요 추가
+export const dislikeReview = async (reviewId) => {
+  return api.post(`/reviews/${reviewId}/dislike`);
+};
+
+// 리뷰 조회수 증가
+export const increaseReviewView = async (reviewId) => {
+  return api.post(`/reviews/${reviewId}`);
+};
+
+export const searchProducts = async (keyword) => {
+  return api.get(`/reviews/products/search`, {
+    params: { keyword }
+  });
+};
+
 // 사용자 계정 유형 확인 API (소셜 계정 여부)
 export const checkAccountType = async () => {
   return api.get("/member/account-type");

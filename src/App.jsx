@@ -6,6 +6,10 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import ProductList from "./pages/Product/ProductList";
 import ProductDetail from "./pages/Product/ProductDetail";
+import ReviewForm from "./pages/Review/ReviewForm";
+import ReviewBoard from "./pages/Review/ReviewBoard";
+import ReviewEdit from "./pages/Review/ReviewEdit";
+import ReviewDetail from "./pages/Review/ReviewDetail";
 import FavoriteList from "./pages/Home/FavoriteList";
 import NoticeBoard from "./pages/Notice/NoticeBoard";
 import NoticeBoardDetail from "./pages/Notice/NoticeBoardDetail";
@@ -17,6 +21,8 @@ import NaverCallback from "./pages/Auth/NaverCallback";
 import UpdateProfile from "./pages/Auth/UpdateProfile";
 import FindPassword from "./pages/Auth/FindPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+import SearchResults from "./pages/Search/SearchResults";
 
 function App() {
   // 공지사항 상태 관리
@@ -41,6 +47,13 @@ function App() {
         <Route path="/notices/:id" element={<NoticeBoardDetail />} />
         <Route path="/callback/google" element={<GoogleCallback />} />
         <Route path="/callback/naver" element={<NaverCallback />} />
+        <Route path="/search" element={<SearchResults />} />
+
+        {/* 📛 리뷰 라우트 */}
+        <Route path="/reviews" element={<ReviewBoard />} />
+        <Route path="/newreview" element={<ReviewForm />} />
+        <Route path="/reviews/:id" element={<ReviewDetail />} />
+        <Route path="/reviews/edit/:id" element={<ReviewEdit />} />
         
         {/* 보호된 라우트 - 로그인 필요 */}
         <Route path="/schedule" element={
