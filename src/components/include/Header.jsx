@@ -44,7 +44,6 @@ const Header = () => {
           <div className="flex items-center space-x-8">
             <Link to="/" className="text-gray-700 hover:text-teal-500 font-medium">홈</Link>
             <Link to="/productdetail" className="text-gray-700 hover:text-teal-500 font-medium">상세페이지</Link>
-            <Link to="/mypage" className="text-gray-700 hover:text-teal-500 font-medium">마이페이지</Link>
             <Link to="/schedule" className="text-gray-700 hover:text-teal-500 font-medium">스케줄</Link>
             <Link to="/notices" className="text-gray-700 hover:text-teal-500 font-medium">공지사항</Link>
           </div>
@@ -59,12 +58,21 @@ const Header = () => {
             )}
             
             {isLoggedIn ? (
-              <button 
-                onClick={handleLogout} 
-                className="rounded-md px-4 py-2 text-teal-500 border border-teal-500 hover:bg-teal-500 hover:text-white transition-colors"
-              >
-                로그아웃
-              </button>
+              <>
+                {/* 회원정보 수정 버튼 추가 */}
+                <Link 
+                  to="/profile" 
+                  className="rounded-md px-4 py-2 text-teal-500 border border-teal-500 hover:bg-teal-500 hover:text-white transition-colors"
+                >
+                  회원정보
+                </Link>
+                <button 
+                  onClick={handleLogout} 
+                  className="rounded-md px-4 py-2 text-teal-500 border border-teal-500 hover:bg-teal-500 hover:text-white transition-colors"
+                >
+                  로그아웃
+                </button>
+              </>
             ) : (
               <>
                 <button 

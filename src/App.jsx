@@ -4,10 +4,8 @@ import { useState } from "react";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
-import MyPage from "./pages/Home/MyPage";
 import ProductList from "./pages/Product/ProductList";
 import ProductDetail from "./pages/Product/ProductDetail";
-import ReviewForm from "./pages/Product/ReviewForm";
 import FavoriteList from "./pages/Home/FavoriteList";
 import NoticeBoard from "./pages/Notice/NoticeBoard";
 import NoticeBoardDetail from "./pages/Notice/NoticeBoardDetail";
@@ -18,7 +16,6 @@ import GoogleCallback from "./pages/Auth/GoogleCallback";
 import NaverCallback from "./pages/Auth/NaverCallback";
 import UpdateProfile from "./pages/Auth/UpdateProfile";
 import FindPassword from "./pages/Auth/FindPassword";
-//import ChangePassword from "./pages/Auth/ChangePassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -46,9 +43,9 @@ function App() {
         <Route path="/callback/naver" element={<NaverCallback />} />
         
         {/* 보호된 라우트 - 로그인 필요 */}
-        <Route path="/mypage" element={
+        <Route path="/schedule" element={
           <ProtectedRoute>
-            <MyPage />
+            <Schedule />
           </ProtectedRoute>
         } />
         <Route path="/profile" element={
@@ -56,24 +53,9 @@ function App() {
             <UpdateProfile />
           </ProtectedRoute>
         } />
-        {/* <Route path="/change-password" element={
-          <ProtectedRoute>
-            <ChangePassword />
-          </ProtectedRoute>
-        } /> */}
-        <Route path="/schedule" element={
-          <ProtectedRoute>
-            <Schedule />
-          </ProtectedRoute>
-        } />
         <Route path="/favorites" element={
           <ProtectedRoute>
             <FavoriteList />
-          </ProtectedRoute>
-        } />
-        <Route path="/review" element={
-          <ProtectedRoute>
-            <ReviewForm />
           </ProtectedRoute>
         } />
         <Route path="/notices/edit/:id" element={
